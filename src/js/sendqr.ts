@@ -1,10 +1,9 @@
 import Discord from 'discord.js';
 import fs from 'fs-extra';
-import path from 'path';
 import configModule from 'config';
 const config: Config = configModule.util.toObject(configModule);
 
-const main = async (role: string) => {
+const main = async (role: string, dryrun: boolean) => {
   try {
     //  Discordのトークン取得
     const token = config.discordToken ? config.discordToken : process.env.NODE_ENV_DISCORD_TOKEN;
@@ -63,8 +62,8 @@ const main = async (role: string) => {
         continue;
       }
 
-      const file = `out/${role}/${userData.discordId}.png`;
-      if (!fs.existsSync(file)) {
+      const qrfilename = `out/${role}/${userData.code}.png`;
+      if (!fs.existsSync(qrfilename)) {
         console.warn('QRコードの画像ファイルが無い');
         continue;
       }
@@ -73,10 +72,27 @@ const main = async (role: string) => {
       const message = messageBase.replace('{code}', userData.code);
 
       const dmchannel = await member.createDM();
-      await dmchannel.send({
+      if (sendedId.includes(dmchannel.id)) {
+        console.log('もう送ったのでskip');
+        continue;
+      }
+
+      const sendObj = {
         content: message,
-        files: [file],
-      });
+        files: [qrfilename],
+      };
+
+      if (!dryrun) {
+        try {
+          const result = await dmchannel.send(sendObj);
+          fs.appendFileSync('data/send.log', JSON.stringify(result, null, '  ') + ',\n');
+
+          sendedId.push(dmchannel.id);
+          fs.appendFileSync(sendedfilename, `${dmchannel.id}\n`);
+        } catch (e) {
+          console.log((e as any).message);
+        }
+      }
     }
 
     // ログアウト
@@ -88,26 +104,23 @@ const main = async (role: string) => {
   }
 };
 
-/**
- * awaitで囲いたいreadFile
- * @param filePath ファイルのパス
- * @param code 文字コード
- * @return 読み込んだ文字列
- */
-export const readFileText = (filePath: string, code: string): Promise<string> => {
-  return new Promise((resolve, reject) => {
-    fs.readFile(filePath, code, (err, data) => {
-      if (err) reject(err);
-      resolve(data);
-    });
-  });
-};
+/** 送信が終わったやつ */
+let sendedId: string[] = [];
+let sendedfilename = 'data/send.log';
 
 (() => {
+  const dryrun = false;
+
+  if (fs.existsSync(sendedfilename)) {
+    sendedId = fs.readFileSync(sendedfilename).toString().split('\n');
+  }
+
   const role: string = process.argv[2];
-  if (role !== 'runner' && role !== 'commentary' && role !== 'volunteer') {
+  if (role !== 'runner' && role !== 'commentator' && role !== 'volunteer') {
     console.warn('引数のroleがおかしい: ' + role);
     process.exit(1);
   }
-  main(role);
+  sendedfilename = `data/send_${role}.log`;
+
+  main(role, dryrun);
 })();

@@ -20,7 +20,8 @@ const createQr = async (role: string) => {
 
   // QR作成
   for (const item of list) {
-    const qrpath = `${basedir}/${item.discordId}.png`;
+    console.log(`${item.name} ${item.code}`);
+    const qrpath = `${basedir}/${item.code}.png`;
     const text = item.code;
     const option: QRCode.QRCodeToFileOptions = {
       type: 'png', //未指定ならpng
@@ -29,7 +30,7 @@ const createQr = async (role: string) => {
 
     QRCode.toFile(qrpath, text, option, function (err) {
       if (err) {
-        console.log(`${item.name} ${item.discordId} でエラー`);
+        console.log(`${item.name} ${item.code} でエラー`);
         console.log(err);
       }
     });
@@ -39,7 +40,7 @@ const createQr = async (role: string) => {
 
 // QR画像を出力
 const role: string = process.argv[2];
-if (role !== 'runner' && role !== 'commentary' && role !== 'volunteer') {
+if (role !== 'runner' && role !== 'commentator' && role !== 'volunteer' && role !== 'guest') {
   console.warn('引数のroleがおかしい: ' + role);
   process.exit(1);
 }

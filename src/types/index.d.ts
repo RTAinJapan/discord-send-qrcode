@@ -1,9 +1,4 @@
 type Config = {
-  /** 
-   * 日付のリスト
-   * @example ['12/26','12/27']
-   */
-  date: string[];
   /**
    * 操作対象のサーバID
    * @description サーバ名のところ右クリックしたらメニューが出てきて取得できる
@@ -21,4 +16,4 @@ type User = {
   name: string;
   discordId: string;
   code: string;
-}
+};

@@ -26,10 +26,11 @@
   },
   "scripts": {
     "createqr:runner": "ts-node --files src/js/createqr.ts runner",
-    "createqr:commentary": "ts-node --files src/js/createqr.ts commentary",
+    "createqr:commentator": "ts-node --files src/js/createqr.ts commentator",
     "createqr:volunteer": "ts-node --files src/js/createqr.ts volunteer",
+    "createqr:guest": "ts-node --files src/js/createqr.ts guest",
     "sendqr:runner": "ts-node --files src/js/sendqr.ts runner",
-    "sendqr:commentary": "ts-node --files src/js/sendqr.ts commentary",
+    "sendqr:commentator": "ts-node --files src/js/sendqr.ts commentator",
     "sendqr:volunteer": "ts-node --files src/js/sendqr.ts volunteer",
     "build": "tsc",
     "lint": "tslint src/**/*.ts"
