@@ -92,6 +92,8 @@ const main = async (role: string, dryrun: boolean) => {
         } catch (e) {
           console.log((e as any).message);
         }
+      } else {
+        fs.appendFileSync('data/send.log', JSON.stringify({ id: member.id, sendObj }, null, '  ') + ',\n');
       }
     }
 
@@ -116,7 +118,7 @@ let sendedfilename = 'data/send.log';
   }
 
   const role: string = process.argv[2];
-  if (role !== 'runner' && role !== 'commentator' && role !== 'volunteer') {
+  if (role !== 'runner' && role !== 'commentator' && role !== 'volunteer' && role !== 'guest') {
     console.warn('引数のroleがおかしい: ' + role);
     process.exit(1);
   }

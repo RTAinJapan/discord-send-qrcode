@@ -32,6 +32,7 @@
     "sendqr:runner": "ts-node --files src/js/sendqr.ts runner",
     "sendqr:commentator": "ts-node --files src/js/sendqr.ts commentator",
     "sendqr:volunteer": "ts-node --files src/js/sendqr.ts volunteer",
+    "sendqr:guest": "ts-node --files src/js/sendqr.ts guest",
     "build": "tsc",
     "lint": "tslint src/**/*.ts"
   },
