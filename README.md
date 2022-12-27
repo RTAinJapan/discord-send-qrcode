@@ -25,7 +25,7 @@ yarn
 ## Data
 
 - data/runner.json
-- data/commentary.json
+- data/commentator.json
 - data/volunteer.json
 
 ```json
