@@ -16,9 +16,8 @@ yarn
 
 ```json
 {
-  "date": ["12/26", "12/27", "12/28", "12/29", "12/30", "12/31"],
   "guildId": "DiscordサーバのID(数値のやつ)",
-  "discordToken": "Token"
+  "discordToken": "Discord BotのToken"
 }
 ```
 
